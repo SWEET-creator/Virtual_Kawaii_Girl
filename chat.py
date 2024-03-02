@@ -22,7 +22,7 @@ def initialize_conversation(file_path="conversation_history.json"):
             raise FileNotFoundError  # Proceed to initialize
     except FileNotFoundError:
         # Initialize the conversation with a system message
-        with open("init_prompt.txt", "r") as file:
+        with open("init_prompt.txt", "r", encoding="utf-8") as file:
             init_prompt = file.read()
         conversations = [{
             "role": "system",

@@ -46,6 +46,7 @@ if __name__ == "__main__":
 
         #言語による応答
         output = chat.chat(input_text)
+        print(output)
 
         #音声出力
         try:
