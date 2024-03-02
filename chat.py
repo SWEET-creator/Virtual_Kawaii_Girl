@@ -7,7 +7,7 @@ client = OpenAI(
 )
 
 
-def initialize_conversation(file_path="conversation_history.json", initial_message="あなたはこれからuserと仲の良い1人の人間として振舞い会話を行います。会話文の書式は以下の通りです。あなたの発言の例は以下通りです。こんにちは。元気だった？この服、可愛いでしょ？最近、このショップの服にはまってるんだ！忘れちゃった、ごめんね。最近、何か面白いことない？えー！秘密にするなんてひどいよー！夏休みの予定か～。海に遊びに行こうかな！返答には最も適切な会話文を一つだけ返答してください。ですます調や敬語は使わないでください。"):
+def initialize_conversation(file_path="conversation_history.json"):
     """
     Initialize the conversation with a system message if the conversation history is empty.
 
@@ -22,9 +22,11 @@ def initialize_conversation(file_path="conversation_history.json", initial_messa
             raise FileNotFoundError  # Proceed to initialize
     except FileNotFoundError:
         # Initialize the conversation with a system message
+        with open("init_prompt.txt", "r") as file:
+            init_prompt = file.read()
         conversations = [{
             "role": "system",
-            "content": initial_message,
+            "content": init_prompt,
         }]
         with open(file_path, "w") as file:
             json.dump(conversations, file)
@@ -68,6 +70,33 @@ def chat(content, file_path="conversation_history.json"):
         messages=past_conversations,
         model="gpt-3.5-turbo",
     )
+    print(past_conversations)
+    outputs = chat_completion.choices[0].message.content
+
+    # Save the updated conversations, including the latest response
+    past_conversations.append({
+        "role": "system",
+        "content": outputs,
+    })
+    save_conversation(past_conversations, file_path)
+
+    return outputs
+
+def speak(content, file_path="conversation_history.json"):
+    # Load past conversations
+    past_conversations = load_conversation(file_path)
+
+    # Append the new message to the past conversations
+    past_conversations.append({
+        "role": "system",
+        "content": content,
+    })
+
+    chat_completion = client.chat.completions.create(
+        messages=past_conversations,
+        model="gpt-3.5-turbo",
+    )
+    print(past_conversations)
     outputs = chat_completion.choices[0].message.content
 
     # Save the updated conversations, including the latest response
