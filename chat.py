@@ -79,6 +79,31 @@ def chat(content, file_path="conversation_history.json"):
 
     return outputs
 
+def speak(content, file_path="conversation_history.json"):
+    # Load past conversations
+    past_conversations = load_conversation(file_path)
+
+    # Append the new message to the past conversations
+    past_conversations.append({
+        "role": "system",
+        "content": content,
+    })
+
+    chat_completion = client.chat.completions.create(
+        messages=past_conversations,
+        model="gpt-3.5-turbo",
+    )
+    outputs = chat_completion.choices[0].message.content
+
+    # Save the updated conversations, including the latest response
+    past_conversations.append({
+        "role": "system",
+        "content": outputs,
+    })
+    save_conversation(past_conversations, file_path)
+
+    return outputs
+
 if __name__ == "__main__":
     initialize_conversation()  # Ensure the conversation is initialized
     print(chat("hello"))
