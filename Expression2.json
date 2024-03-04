@@ -1,0 +1,20 @@
+{
+    "Neutral": 1.0,
+    "A": 0.0,
+    "I": 0.0,
+    "U": 0.0,
+    "E": 0.0,
+    "O": 0.0,
+    "Blink": 0.0,
+    "Blink_L": 0.0,
+    "Blink_R": 0.0,
+    "Angry": 0.0,
+    "Fun": 0.0,
+    "Joy": 0.0,
+    "Sorrow": 0.0,
+    "Surprised": 0.0,
+    "LookUp": 0.0,
+    "LookDown": 0.0,
+    "LookLeft": 0.0,
+    "LookRight": 0.0 
+}

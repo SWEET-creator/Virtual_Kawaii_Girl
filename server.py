@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/get_expression')
 def get_expression():
-    file_path = 'Expression.json'
+    file_path = 'Expression2.json'
     try:
         # ファイルを読み取り
         with open(file_path, 'r') as file:
