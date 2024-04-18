@@ -1,6 +1,7 @@
 import chat
 import voice
 import emotion
+import vision
 
 def talk(input_text):
     kawaii_voice = voice.Voice()
@@ -27,15 +28,14 @@ def talk(input_text):
 
     kawaii_voice.pya.terminate()
 
-
-if __name__ == "__main__":
+def main():
     kawaii_voice = voice.Voice()
 
     chat.initialize_conversation()
 
     while(1):
         stream = kawaii_voice.setup_stream()
-
+        
         # ユーザーからのテキスト入力
         input_text = input() 
         if input_text == "q":
@@ -58,3 +58,7 @@ if __name__ == "__main__":
         stream.close()
 
     kawaii_voice.pya.terminate()
+
+
+if __name__ == "__main__":
+    main()

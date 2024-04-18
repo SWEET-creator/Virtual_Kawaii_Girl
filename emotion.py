@@ -6,8 +6,74 @@ import unicodedata
 import numpy as np
 import json
 
+
+def read_expression_json():
+    file_path = "Expression.json"
+    with open(file_path, 'r') as file:
+        # jsonを辞書型に変換
+        data = json.load(file)
+    return data
+
+def update_json_parameter(json_data, key, new_value):
+    """
+    json_data: 辞書に変換されたJSONデータ
+    key: 更新したいパラメータのキー
+    new_value: 新しい値
+    """
+    # キーが辞書に存在する場合、値を更新
+    if key in json_data:
+        json_data[key] = new_value
+    else:
+        print(f"Key '{key}' not found in JSON data.")
+    
+    # 更新された辞書を返す
+    return json_data
+
+
+
 # Word2Vecモデルの訓練（前のステップと同様）
-sentences = [["happy", "Fun", "pleased", "Joy"], ["Sorrow", "depressed", "unhappy"], ["angry", "mad", "furious"], ["Neutral", "calm", "relaxed"]]
+sentences = [['happy',
+                'Fun',
+                'pleased',
+                'Joy',
+                'elated',
+                'cheerful',
+                'joyful',
+                'content',
+                'delighted',
+                'glad',
+                'blissful'],
+                ['Sorrow',
+                'depressed',
+                'unhappy',
+                'mournful',
+                'saddened',
+                'melancholic',
+                'gloomy',
+                'heartbroken',
+                'desolate',
+                'despairing'],
+                ['angry',
+                'mad',
+                'furious',
+                'irate',
+                'enraged',
+                'incensed',
+                'seething',
+                'annoyed',
+                'agitated',
+                'exasperated'],
+                ['Neutral',
+                'calm',
+                'relaxed',
+                'serene',
+                'peaceful',
+                'tranquil',
+                'unflustered',
+                'composed',
+                'unperturbed',
+                'stoic']]
+
 model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, workers=2)
 
 # 感情単語のリストに「Neutral」を追加

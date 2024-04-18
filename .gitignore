@@ -1,7 +1,18 @@
 __pycache__/
 
+data/
+
 setting.py
 
 conversation_history.json
 
 received_audio.wav
+
+comment.csv
+
+init_prompt.txt
+
+init_prompt.txt
+
+vision/models/
+

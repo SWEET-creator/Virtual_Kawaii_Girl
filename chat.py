@@ -1,6 +1,8 @@
 from openai import OpenAI
 import json
 import setting
+import pandas as pd
+import random
 
 client = OpenAI(
     api_key=setting.open_ai_api_key,
@@ -56,9 +58,24 @@ def set_emotion(emotion, file_path="conversation_history.json"):
     with open(file_path, "w") as file:
         json.dump(conversations, file)
 
-def chat(content, file_path="conversation_history.json"):
+def chat(content):
+    with open("init_prompt.txt", "r", encoding="utf-8") as file:
+        init_prompt = file.read()
+        prompt = [{
+            "role": "system",
+            "content": init_prompt,
+        }]
+    
+    comment = pd.read_csv("comment.csv")
+    comment_list = random.sample(list(comment["comment"]), 30)
+    for com in comment_list:
+        prompt.append({
+            "role": "system",
+            "content": com,
+        })
+
     # Load past conversations
-    past_conversations = load_conversation(file_path)
+    past_conversations = load_conversation("conversation_history.json")
 
     # Append the new message to the past conversations
     past_conversations.append({
@@ -66,11 +83,15 @@ def chat(content, file_path="conversation_history.json"):
         "content": content,
     })
 
+    n = 2
+
+    prompt += past_conversations[-n:]
+
     chat_completion = client.chat.completions.create(
-        messages=past_conversations,
+        messages=prompt,
         model="gpt-3.5-turbo",
     )
-    print(past_conversations)
+    print(prompt)
     outputs = chat_completion.choices[0].message.content
 
     # Save the updated conversations, including the latest response
@@ -78,7 +99,7 @@ def chat(content, file_path="conversation_history.json"):
         "role": "system",
         "content": outputs,
     })
-    save_conversation(past_conversations, file_path)
+    save_conversation(past_conversations, "conversation_history.json")
 
     return outputs
 
