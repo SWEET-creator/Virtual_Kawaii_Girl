@@ -58,7 +58,7 @@ def set_emotion(emotion, file_path="conversation_history.json"):
     with open(file_path, "w") as file:
         json.dump(conversations, file)
 
-def chat(content):
+def chat(content, role = "user"):
     with open("init_prompt.txt", "r", encoding="utf-8") as file:
         init_prompt = file.read()
         prompt = [{
@@ -79,7 +79,7 @@ def chat(content):
 
     # Append the new message to the past conversations
     past_conversations.append({
-        "role": "user",
+        "role": role,
         "content": content,
     })
 

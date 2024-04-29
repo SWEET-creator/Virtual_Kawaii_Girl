@@ -11,6 +11,7 @@ class Voice():
         stream = self.pya.open(format=pyaudio.paInt16,
                 channels=1,
                 rate=24000,
+                output_device_index = 14,
                 output=True)
         return stream
 

@@ -39,15 +39,17 @@ def drow_bbox(pred, names, annotator):
     for *xyxy, conf, cls in reversed(pred):
         c = int(cls)  # integer class
         label =  f'{names[c]} {conf:.2f}'
-        labels.append(label)
+        labels.append(names[c])
 
         annotator.box_label(xyxy, label, color=colors(c, True))
     return labels
 
 def get_labels():
+    global labels
     return labels
 
 def main():
+    global labels
     while True:
         ret, img = cap.read()
         origin = deepcopy(img)
