@@ -153,3 +153,19 @@ def change_emotion_based_on_input(input_text):
         json.dump(data, f)
     
     file_path_to_unity = "Expression2.json"
+
+    # ファイルを読み込み
+    with open(file_path_to_unity, 'r') as file:
+        data = json.load(file)
+
+    # 更新したい感情を設定
+    emotion_to_update = "Joy"
+
+    # すべての感情の値を0.0に設定し、指定された感情のみを1.0に設定
+    for key in data:
+        data[key] = 0.0
+    data[emotion_to_update] = 1.0
+
+    # 変更を元のファイルに書き戻す
+    with open(file_path_to_unity, 'w') as file:
+        json.dump(data, file, indent=4)
