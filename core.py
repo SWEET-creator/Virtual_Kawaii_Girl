@@ -5,11 +5,6 @@ import vision
 import time
 import random
 
-def get_user_input(input_done):
-    global input_text
-    input_text = input()
-    input_done.set()  # 入力が完了したことをメインスレッドに通知
-
 def talk(input_text):
     kawaii_voice = voice.Voice()
 
@@ -99,6 +94,41 @@ def main(only_text=False):
 
     kawaii_voice.pya.terminate()
 
+def talk2():
+    global input_text
+
+    # こえをだすじゅんび
+    kawaii_voice = voice.Voice()
+
+    # はなすじゅんび
+    chat.initialize_conversation()
+
+    while(1):
+        stream = kawaii_voice.setup_stream()
+
+        input_text = input()
+        if input_text == "q":
+            break
+
+        #入力に従って感情を変化させる
+        emotion.change_emotion_based_on_input(input_text)
+
+        #言語による応答
+        output = chat.chat(input_text)
+        print(output)
+
+        #音声出力
+        try:
+            voice.voice(stream, output)
+        except:
+            continue
+        
+        # ひといきつく
+        stream.stop_stream()
+        stream.close()
+
+    kawaii_voice.pya.terminate()
+
 
 if __name__ == "__main__":
-    main(only_text = True)
+    talk2()

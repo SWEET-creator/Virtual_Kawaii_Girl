@@ -50,15 +50,25 @@ def load_conversation(file_path="conversation_history.json"):
     except FileNotFoundError:
         return []  # Return an empty list if the file does not exist.
 
-def set_emotion(emotion, file_path="conversation_history.json"):
-    conversations = [{
+def set_emotion(prompt):
+    file_path = "Expression.json"
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+        emotion = data["expression"]
+    
+    emotion_dic = {"Neutral" : "ふつう", "Joy": "たのしい", "Sorrow" : "かなしい"}
+
+    conversations = {
         "role": "system",
-        "content": "あなたは" + emotion + "な感情で振る舞ってください．",
-    }]
-    with open(file_path, "w") as file:
-        json.dump(conversations, file)
+        "content": "あなたは" + emotion_dic[emotion] + "な感情で振る舞ってください．",
+    }
+
+    prompt.append(conversations)
+
+    return prompt
 
 def chat(content, role = "user"):
+    # 人格をセット
     with open("init_prompt.txt", "r", encoding="utf-8") as file:
         init_prompt = file.read()
         prompt = [{
@@ -66,6 +76,7 @@ def chat(content, role = "user"):
             "content": init_prompt,
         }]
     
+    # 記憶をセット
     comment = pd.read_csv("comment.csv")
     comment_list = random.sample(list(comment["comment"]), 30)
     for com in comment_list:
@@ -73,8 +84,11 @@ def chat(content, role = "user"):
             "role": "system",
             "content": com,
         })
+    
+    # 感情をセット
+    prompt = set_emotion(prompt)
 
-    # Load past conversations
+    # これまでの会話をセット
     past_conversations = load_conversation("conversation_history.json")
 
     # Append the new message to the past conversations
