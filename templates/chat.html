@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>テキスト送信フォーム</title>
+    <script>
+        // フォームのデータを非同期で送信する関数
+        function submitText() {
+            var xhr = new XMLHttpRequest();
+            var url = "/submit_text"; // 送信先URL
+            var text = document.getElementById("text").value; // フォームの入力値を取得
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById("response").innerHTML =
+                        "サーバーからの応答: " + response.message + "<br>受信テキスト: " + response.receivedText;
+                }
+            };
+            var data = JSON.stringify({text: text});
+            xhr.send(data);
+        }
+    </script>
+</head>
+<body>
+    <h1>テキスト送信テスト</h1>
+    <input type="text" id="text" placeholder="テキストを入力">
+    <button onclick="submitText()">送信</button>
+    <div id="response"></div>
+</body>
+</html>

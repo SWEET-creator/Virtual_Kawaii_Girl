@@ -35,5 +35,9 @@ def upload_audio():
 def get_upload_page():
     return render_template('upload.html')
 
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
