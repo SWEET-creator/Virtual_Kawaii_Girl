@@ -1,23 +1,11 @@
-__pycache__/
+#Virtual cute girl project
 
-data/
+## about
+The purpose of this project is to create a "Virtual Kawaii Girl" (VKG) as an interactive AI model.
 
-setting.py
+## Function
+### INTERACTIVE ON THE WEB
+You can interact with local websites.
 
-conversation_history.json
-
-received_audio.wav
-
-comment.csv
-
-init_prompt.txt
-
-init_prompt.txt
-
-vision/models/
-
-test/
-
-Expression2.json
-
-Expression.json
+### YouTube Live as an AITuber
+You can create an AITuber and create a VKG stream.
