@@ -51,7 +51,7 @@ def live(kawaii_voice):
                 chat_with_voice(input_text, kawaii_voice, role = "system")
 
 
-        time.sleep(5)
+        time.sleep(3)
 
 def automatical_talk(kawaii_voice):
     cnt = 0
@@ -68,7 +68,7 @@ def automatical_talk(kawaii_voice):
 
 def main():
 
-    live_mode = False
+    live_mode = True
 
     kawaii_voice = voice.Voice()
 
