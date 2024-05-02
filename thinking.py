@@ -9,7 +9,7 @@ url = "https://www.weblio.jp/WeblioRandomSelectServlet"
 word_list = ["今日は何をした？", "情緒", "世界", "ブイチューバー", "存在", "特定の食べ物について話す", "最近気になってることは？", "どんな夢をみたい？", "明日何をする？", "最近勉強してることは？"]
 
 def generate_word():
-    return random.choice(word_list)+"について独り言として話す"
+    return random.choice(word_list)
 
 def generate_word_temp():
     # requestsを使用してWebページを取得
