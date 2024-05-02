@@ -1,4 +1,4 @@
-# Virtual cute girl project
+# Virtual Kawaii girl project
 
 ## about
 The purpose of this project is to create a "Virtual Kawaii Girl" (VKG) as an interactive AI model.
