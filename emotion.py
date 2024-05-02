@@ -1,5 +1,6 @@
 from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import euclidean_distances
+import gensim.downloader as api
 
 from textblob import TextBlob
 import unicodedata
@@ -74,6 +75,13 @@ sentences = [['happy',
                 'unperturbed',
                 'stoic']]
 
+# 単語ベクトルモデルのロード
+emotion_estimate_model = api.load('glove-twitter-25')
+
+# 感情ベクトルを取得
+def get_emotion_vector(emotion):
+    return emotion_estimate_model[emotion] if emotion in emotion_estimate_model else np.zeros(100)
+
 model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, workers=2)
 
 # 感情単語のリストに「Neutral」を追加
@@ -100,6 +108,23 @@ def is_japanese(string):
             return True
     return False
 
+def estimate_emotion(text):
+    blob = TextBlob(text)
+    polarity = blob.sentiment.polarity
+    
+    # 極性に基づいて感情方向を選択（ポジティブ、ネガティブ、またはニュートラル）
+    if polarity > 0:
+        target_emotion = 'Joy'
+    elif polarity < 0:
+        target_emotion = 'Sorrow'
+    else:
+        target_emotion = 'Neutral'
+    
+    print("target emotion", target_emotion)
+    target_vector = model.wv[target_emotion]
+    return target_vector
+
+
 # 入力テキストに基づいて感情の方向を変える関数
 def change_emotion_based_on_input(input_text):
     global current_emotion_vector
@@ -117,26 +142,18 @@ def change_emotion_based_on_input(input_text):
     else:
         analyzed_text = input_text
 
-    blob = TextBlob(analyzed_text)
-    polarity = blob.sentiment.polarity
-    
-    # 極性に基づいて感情方向を選択（ポジティブ、ネガティブ、またはニュートラル）
-    if polarity > 0:
-        target_emotion = 'Joy'
-    elif polarity < 0:
-        target_emotion = 'Sorrow'
-    else:
-        target_emotion = 'Neutral'
-    
+    # get emotion from estimater
+    #target_vector = get_emotion_vector(analyzed_text)
+    target_vector = estimate_emotion(analyzed_text)
+
     # 対象の感情方向に現在の感情ベクトルを少し移動させる
-    target_vector = model.wv[target_emotion]
     current_emotion_vector += (target_vector - current_emotion_vector) * 0.5  # 移動量を調整
     
     # 現在の感情と最も近い感情単語を探す
     distances = euclidean_distances(emotion_vectors, [current_emotion_vector])
     nearest_emotion_index = np.argmin(distances)
     emotion = emotion_words[nearest_emotion_index]
-    print(f"Input sentiment: {target_emotion}, Current emotion: {emotion}")
+    print(f"Current emotion: {emotion}")
 
     with open(file_path, 'w') as f:
         if emotion == "Joy":
